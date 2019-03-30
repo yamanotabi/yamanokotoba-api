@@ -26,6 +26,8 @@ gem 'mongoid', '~> 6.4.2'
 gem 'twitter'
 gem 'dotenv-rails'
 gem 'aws-sdk', '~> 2'
+gem 'rmagick'
+gem 'mini_magick'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
