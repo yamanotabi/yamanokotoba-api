@@ -25,7 +25,7 @@ gem 'rack-cors'
 gem 'mongoid', '~> 6.4.2'
 gem 'twitter'
 gem 'dotenv-rails'
-gem 'aws-sdk', '~> 2'
+gem 'aws-sdk', '~>1'
 gem 'rmagick'
 gem 'mini_magick'
 

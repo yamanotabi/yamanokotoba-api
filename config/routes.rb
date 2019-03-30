@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       # TODO: remove unneccesary routes
       resources :words
+      resources :images
     end
   end
 end
