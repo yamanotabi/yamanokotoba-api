@@ -1,5 +1,5 @@
-module Words
-    module WordService
+module Images
+    module ImageService
         require 'mini_magick'
 
         GRAVITY = 'center'.freeze

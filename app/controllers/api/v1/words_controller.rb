@@ -20,7 +20,7 @@ module Api
                 @word.text = params[:text]
                 @word.user_name = params[:user_name]
                 @word.user_image_url = params[:user_image_url]
-                @word.background_image_url = Words::WordService.upload(params[:file])
+                @word.background_image_url = Images::ImageService.upload(params[:file])
 
                 begin
                     if @word.save
