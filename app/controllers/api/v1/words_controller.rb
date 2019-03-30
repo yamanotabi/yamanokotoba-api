@@ -12,8 +12,6 @@ module Api
 
             # POST /api/v1/word
             def create
-                # TODO: 
-                # if image_url == nil => add image_url
                 @word = Word.new
 
                 # imageに文字を重ねて、S3にアップロードする
