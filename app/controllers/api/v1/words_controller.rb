@@ -14,7 +14,14 @@ module Api
             def create
                 # TODO: 
                 # if image_url == nil => add image_url
-                @word = Word.new(word_params)
+                @word = Word.new
+
+                # imageに文字を重ねて、S3にアップロードする
+                @word.text = params[:text]
+                @word.user_name = params[:user_name]
+                @word.user_image_url = params[:user_image_url]
+                @word.background_image_url = Words::WordService.upload(params[:file])
+
                 begin
                     if @word.save
                         render json: @word, status: :created
@@ -43,11 +50,6 @@ module Api
                 @word = Word.find(params[:id])
             end
         
-            private
-            def word_params
-                params.require(:word).permit(:access_token, :access_token_secret, :text, :user_name, :background_image_url, :user_image_url)
-            end
-
             def set_twitter_client
                 @twitter = Twitter::REST::Client.new do |config|
                   config.consumer_key        = ENV["TWITTER_API_KEY"]
@@ -55,8 +57,7 @@ module Api
                   config.access_token        = params[:access_token]
                   config.access_token_secret = params[:access_token_secret]
                 end
-              end
-
+            end
         end
     end
 end
