@@ -11,7 +11,6 @@ namespace :query do
       p word
     end
   end
-
   task :deleteAll => :environment do
     @words = Word.all
     @words.each do |word|
@@ -20,16 +19,10 @@ namespace :query do
   end
 
   task :delete => :environment do
-    Word.where(id: '5c9f2e993211d7f4cffff225').delete()
-    Word.where(id: '5c9f2fe53211d7f4cffff226').delete()
-    Word.where(id: '5c9f33fd3211d718a8493114').delete()
-    Word.where(id: '5c9f34a93211d71c61aecd78').delete()
+    Word.where(id: '5c8c49293211d74ac5d0bc31').delete()
   end
 
   task :all => :environment do
     @words = Word.all
-    @words.each do |word|
-      p word
-    end
   end
 end
