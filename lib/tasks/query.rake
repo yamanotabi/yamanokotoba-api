@@ -19,10 +19,13 @@ namespace :query do
   end
 
   task :delete => :environment do
-    Word.where(id: '5c8c49293211d74ac5d0bc31').delete()
+    Word.where(id: '5ca01bc93211d72e1c424c44').delete()
   end
 
   task :all => :environment do
     @words = Word.all
+    @words.each do |word|
+      p word
+    end
   end
 end

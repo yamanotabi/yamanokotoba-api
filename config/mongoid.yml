@@ -159,3 +159,10 @@ test:
         read:
           mode: :primary
         max_pool_size: 1
+
+production:
+  clients:
+    defalut:
+      uri: mongodb://heroku_sd8mq5vg:pg03j02b5528qvml9vu8gi2i3d@ds239682.mlab.com:39682/heroku_sd8mq5vg
+      options:
+        connect_timeout: 15
