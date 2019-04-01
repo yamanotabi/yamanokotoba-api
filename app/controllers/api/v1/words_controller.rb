@@ -20,18 +20,18 @@ module Api
                 @word.text = params[:text]
                 @word.user_name = params[:user_name]
                 @word.user_image_url = params[:user_image_url]
-                @word.background_image_url = Images::ImageService.upload(params[:file])
+                @word.background_image_url = Images::ImageService.upload(params[:file], params[:text])
 
                 begin
                     if @word.save
-                        render json: @word, status: :created
+                        render json: @word, status: :created and return
                     else
-                        render json: @word.errors, status: :unprocessable_entity
+                        render json: @word.errors, status: :unprocessable_entity and return
                     end
                     @twitter.update!(@word.text)
                 rescue => e
                     error = e
-                    render json: error
+                    render json: error and return
                 end
             end
 

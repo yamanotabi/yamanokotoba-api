@@ -9,7 +9,7 @@ module Images
         INDENTION_COUNT = 15
 
         class << self
-            def upload(data)
+            def upload(data, test)
                 s3 = AWS::S3.new(
                     :access_key_id     => ENV["AWS_ACCESS_KEY_ID"],
                     :secret_access_key => ENV["AWS_SECRET_ACCESS_KEY"],
@@ -22,7 +22,7 @@ module Images
                 file_name = @data.original_filename
                 file_full_path="images/"+file_name
 
-                build("ソードアートオンラインではシノン推し")
+                build(text)
 
                 post = ActionDispatch::Http::UploadedFile.new(
                     filename:file_name,
