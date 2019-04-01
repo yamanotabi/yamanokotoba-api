@@ -33,8 +33,7 @@ module Images
                 object = bucket.objects[file_full_path]
                 object.write(post.open, :acl => :public_read)
 
-                # "http://s3-ap-northeast-1.amazonaws.com/images/#{file_name}"
-                return "http://s3-ap-northeast-1.amazonaws.com/images/#{file_name}"
+                return ENV[S3_BASE_URL] + "/images/#{file_name}"
             end
 
             # 合成後のFileClassを生成
