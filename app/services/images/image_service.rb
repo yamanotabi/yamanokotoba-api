@@ -50,7 +50,7 @@ module Images
 
             private
             def uniq_file_name
-                "#{SecureRandom.hex}"
+                "#{SecureRandom.hex}.png"
             end
 
             # 設定関連の値を代入
