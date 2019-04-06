@@ -1,11 +1,13 @@
 module Images
     module ImageService
         require 'mini_magick'
+        require 'securerandom'
 
         GRAVITY = 'center'.freeze
         TEXT_POSITION = '0,0'.freeze
-        FONT = 'app/assets/fonts/komorebi-gothic.ttf'.freeze
+        FONT = 'app/assets/fonts/Kosugi-Regular.ttf'.freeze
         FONT_SIZE = 45
+        OVERLAY = 'app/assets/images/overlay.png'.freeze
         INDENTION_COUNT = 15
 
         class << self
@@ -19,21 +21,25 @@ module Images
                 @image = MiniMagick::Image.read(data)
                 @image.resize "900x600"
                 
-                file_name = @data.original_filename
+                @result = @image.composite(MiniMagick::Image.open(OVERLAY, "png"))
+                
+                # convert before.png \( overlay.png -fill "rgba(0,0,0,0.5)" -fuzz 20% -opaque gray \) -composite result.png
+                file_name = uniq_file_name
                 file_full_path="images/"+file_name
 
                 build(text)
 
                 post = ActionDispatch::Http::UploadedFile.new(
-                    filename:file_name,
+                    filename: file_name,
                     type: 'image/png',
-                    tempfile: @image.tempfile
+                    tempfile: @result.tempfile
                 )
 
                 object = bucket.objects[file_full_path]
                 object.write(post.open, :acl => :public_read)
 
-                return ENV["S3_BASE_URL"] + "/images/#{file_name}"
+                return "https://s3-ap-northeast-1.amazonaws.com/yamatabi-develop/images/#{file_name}"
+                # return ENV["S3_BASE_URL"] + "/images/#{file_name}"
             end
 
             # 合成後のFileClassを生成
@@ -42,14 +48,18 @@ module Images
                 configuration(text)
             end
 
-            private    
+            private
+            def uniq_file_name
+                "#{SecureRandom.hex}"
+            end
+
             # 設定関連の値を代入
             def configuration(text)
-                @image.combine_options do |config|
+                @result.combine_options do |config|
                 config.font FONT
                 config.gravity GRAVITY
                 config.pointsize FONT_SIZE
-                config.fill("#FFFFFF") 
+                config.fill "#FFFFFF"
                 config.draw "text #{TEXT_POSITION} '#{text}'"
                 end
             end
