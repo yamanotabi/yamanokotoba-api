@@ -21,7 +21,7 @@ module Images
                 @image = MiniMagick::Image.read(data)
                 @image.resize "900x600"
                 
-                @result = @image.composite(MiniMagick::Image.open(OVERLAY, "png"))
+                @result = @image.composite(MiniMagick::Image.open(OVERLAY, "jpg"))
                 
                 # convert before.png \( overlay.png -fill "rgba(0,0,0,0.5)" -fuzz 20% -opaque gray \) -composite result.png
                 file_name = uniq_file_name
@@ -31,7 +31,7 @@ module Images
 
                 post = ActionDispatch::Http::UploadedFile.new(
                     filename: file_name,
-                    type: 'image/png',
+                    type: 'image/jpg',
                     tempfile: @result.tempfile
                 )
 
@@ -50,7 +50,7 @@ module Images
 
             private
             def uniq_file_name
-                "#{SecureRandom.hex}.png"
+                "#{SecureRandom.hex}.jpg"
             end
 
             # 設定関連の値を代入
