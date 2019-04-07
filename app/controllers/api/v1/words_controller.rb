@@ -18,7 +18,7 @@ module Api
 
                 text = params[:text]
                 
-                @word.id = id
+                @word.id = params[:id]
                 @word.text = text
                 @word.user_name = params[:user_name]
                 @word.user_image_url = params[:user_image_url]
