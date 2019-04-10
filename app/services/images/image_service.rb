@@ -19,7 +19,7 @@ module Images
                 bucket = s3.buckets[ENV["S3_BUCKET"]]
                 @data = data
                 @image = MiniMagick::Image.read(data)
-                @image.resize "900x600"
+                @image.resize "450x300!"
                 
                 @result = @image.composite(MiniMagick::Image.open(OVERLAY, "jpg"))
                 
