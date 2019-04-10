@@ -6,7 +6,7 @@ module Images
         GRAVITY = 'center'.freeze
         TEXT_POSITION = '0,0'.freeze
         FONT = 'app/assets/fonts/Kosugi-Regular.ttf'.freeze
-        FONT_SIZE = 30
+        FONT_SIZE = 45
         OVERLAY = 'app/assets/images/overlay.png'.freeze
         INDENTION_COUNT = 15
 
