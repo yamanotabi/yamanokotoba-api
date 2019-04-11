@@ -22,6 +22,7 @@ module Api
                 @word.text = text
                 @word.user_name = params[:user_name]
                 @word.user_image_url = params[:user_image_url]
+                @word.user_id = params[:user_id]
                 # imageに文字を重ねて、S3にアップロードする
                 @word.background_image_url = Images::ImageService.upload(params[:file], params[:text])
                 @word.tweet_text = params[:tweet_text]
@@ -42,6 +43,12 @@ module Api
             # GET /api/v1/word/:id
             def show
                 render json: @word
+            end
+
+            # Get /api/v1/users/:user_id/words
+            def getByUser
+                @words = Word.where(user_id: params[:user_id])
+                render json: @words
             end
 
             # DELETE /api/v1/word/:id

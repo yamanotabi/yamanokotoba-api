@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       # TODO: remove unneccesary routes
       resources :words
       resources :images
+      get '/users/:user_id/words', to: 'words#getByUser'
     end
   end
 end
