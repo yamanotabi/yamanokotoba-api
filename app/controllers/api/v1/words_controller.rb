@@ -14,7 +14,7 @@ module Api
             def index
                 # scan from redis
                 words = []
-                REDIS.keys('w_*').each do |key|
+                REDIS.keys('w_*').reverse_each do |key|
                     words.push(JSON.parse(REDIS.get(key)))                    
                 end
                 render json: words
@@ -70,7 +70,7 @@ module Api
                     words.push(JSON.parse(REDIS.get(key)))
                 end
                 render json: words
-                
+
                 # get from mongodb
                 # @words = Word.where(user_id: params[:user_id])
                 # render json: @words
