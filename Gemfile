@@ -28,6 +28,8 @@ gem 'dotenv-rails'
 gem 'aws-sdk', '~>1'
 gem 'rmagick'
 gem 'mini_magick'
+gem 'redis'
+gem 'redis-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

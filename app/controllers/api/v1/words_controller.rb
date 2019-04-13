@@ -1,6 +1,10 @@
 module Api
     module V1
         require 'securerandom'
+        require 'json'
+
+        WORD_PREFIX = 'w_'.freeze
+        USER_PREFIX = 'u_'.freeze
 
         class Api::V1::WordsController < ApplicationController
             before_action :set_word, only:[:show, :destroy]
@@ -8,8 +12,16 @@ module Api
 
             # GET /api/v1/word
             def index
-                @words = Word.all
-                render json: @words
+                # scan from redis
+                words = []
+                REDIS.keys('w_*').each do |key|
+                    words.push(JSON.parse(REDIS.get(key)))                    
+                end
+                render json: words
+
+                # scan from mongodb
+                # @words = Word.all
+                # render json: @words
             end
 
             # POST /api/v1/word
@@ -18,22 +30,26 @@ module Api
 
                 text = params[:text]
                 
-                @word.id = params[:id]
+                @word.id = WORD_PREFIX + params[:id]
                 @word.text = text
                 @word.user_name = params[:user_name]
                 @word.user_image_url = params[:user_image_url]
-                @word.user_id = params[:user_id]
+                @word.user_id = USER_PREFIX + params[:user_id]
                 # imageに文字を重ねて、S3にアップロードする
                 @word.background_image_url = Images::ImageService.upload(params[:file], params[:text])
                 @word.tweet_text = params[:tweet_text]
 
                 begin
+                    # 先にmongodbに登録する
                     if @word.save
+                        # register to redis
+                        REDIS.set(@word.id, @word.to_json)
+                        REDIS.lpush(@word.user_id, @word.id)
+
                         render json: @word, status: :created and return
                     else
                         render json: @word.errors, status: :unprocessable_entity and return
                     end
-                    # @twitter.update!(@word.text)
                 rescue => e
                     error = e
                     render json: error and return
@@ -42,13 +58,22 @@ module Api
 
             # GET /api/v1/word/:id
             def show
+                @word = REDIS.get(params[:id])
                 render json: @word
             end
 
             # Get /api/v1/users/:user_id/words
             def getByUser
-                @words = Word.where(user_id: params[:user_id])
-                render json: @words
+                word_ids = REDIS.lrange(USER_PREFIX + params[:user_id], 0, -1)
+                words = []
+                word_ids.each do |key|
+                    words.push(JSON.parse(REDIS.get(key)))
+                end
+                render json: words
+                
+                # get from mongodb
+                # @words = Word.where(user_id: params[:user_id])
+                # render json: @words
             end
 
             # DELETE /api/v1/word/:id
